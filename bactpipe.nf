@@ -62,18 +62,23 @@ printSettings()
 // Prepare channels
 //================================================================================
 
+if (params.sra_ids) {
 
-fastp_input = Channel.fromFilePairs(params.reads)
+    fastp_input = Channel.fromFilePairs(params.reads)
 
-fastp_input
-        .ifEmpty {
-            log.error "Cannot find any reads matching: '${params.reads}'\n\n" +
-                    "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
-                    "Specify --help for a summary of available commands."
-            printHelp()
-            exit(1)
-        }
+    fastp_input
+            .ifEmpty {
+                log.error "Cannot find any reads matching: '${params.reads}'\n\n" +
+                        "Did you specify --reads 'path/to/*_{1,2}.fastq.gz'? (note the single quotes)\n" +
+                        "Specify --help for a summary of available commands."
+                printHelp()
+                exit(1)
+            }
 
+} else {
+    // Use a YML file to enumerate these IDs and pass it via -params-file option for the Nextflow CLI
+    fastp_input = Channel.fromSRA(params.sra_ids)
+}
 
 //================================================================================
 // Main workflow

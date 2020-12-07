@@ -77,8 +77,14 @@ if (!params.sra_ids) {
             }
 
 } else {
+
+    if (!params.ncbi_api_key) {
+        log.error "Please specify the API key via ncbi_api_key param."
+        exit(1)
+    }
+
     // Use a YML file to enumerate these IDs and pass it via -params-file option for the Nextflow CLI
-    fastp_input = Channel.fromSRA(params.sra_ids)
+    fastp_input = Channel.fromSRA(params.sra_ids, apiKey: params.ncbi_api_key)
 }
 
 //================================================================================

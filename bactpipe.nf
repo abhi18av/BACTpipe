@@ -62,7 +62,8 @@ printSettings()
 // Prepare channels
 //================================================================================
 
-if (params.sra_ids) {
+// If sra_ids are not specified by params, fallback to the default behavior of reading from filesystem.
+if (!params.sra_ids) {
 
     fastp_input = Channel.fromFilePairs(params.reads)
 
